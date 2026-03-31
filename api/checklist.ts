@@ -29,18 +29,19 @@ export default async function handler(req: any, res: any) {
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-flash-latest',
-      contents: `Skapa en detaljerad, praktisk och genomförbar checklista för en svensk organisation för att uppfylla kraven i:\n\nTitel: ${title}\nSammanfattning: ${summary}`,
+      model: 'gemini-3-flash-preview',
+      contents: `Skapa en checklista för:\n\nTitel: ${title}\nSammanfattning: ${summary}`,
       config: {
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
         responseMimeType: 'application/json',
         responseSchema: {
           type: Type.ARRAY,
           items: {
             type: Type.OBJECT,
             properties: {
-              id: { type: Type.STRING, description: 'Ett unikt ID för checklist-objektet' },
-              task: { type: Type.STRING, description: 'Själva uppgiften som ska utföras' },
-              description: { type: Type.STRING, description: 'En mer detaljerad förklaring av uppgiften' }
+              id: { type: Type.STRING, description: 'ID' },
+              task: { type: Type.STRING, description: 'Uppgift' },
+              description: { type: Type.STRING, description: 'Förklaring' }
             },
             required: ['id', 'task', 'description']
           }

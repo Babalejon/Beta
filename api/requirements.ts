@@ -42,20 +42,21 @@ export default async function handler(req: any, res: any) {
     }
 
     const response = await ai.models.generateContent({
-      model: 'gemini-flash-latest',
+      model: 'gemini-3-flash-preview',
       contents: prompt,
       config: {
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
         responseMimeType: 'application/json',
         responseSchema: {
           type: Type.ARRAY,
           items: {
             type: Type.OBJECT,
             properties: {
-              id: { type: Type.STRING, description: 'Ett unikt ID, t.ex. SFS-nummer eller AFS-nummer' },
-              title: { type: Type.STRING, description: 'Namnet på lagen eller föreskriften' },
-              summary: { type: Type.STRING, description: 'En kort sammanfattning av vad kravet innebär' },
-              url: { type: Type.STRING, description: 'Länk till officiell källa om tillgänglig' },
-              type: { type: Type.STRING, description: 'Ska vara antingen "Lag", "Föreskrift" eller "ISO-standard"' }
+              id: { type: Type.STRING, description: 'ID (t.ex. SFS/AFS-nr)' },
+              title: { type: Type.STRING, description: 'Titel' },
+              summary: { type: Type.STRING, description: 'Kort sammanfattning' },
+              url: { type: Type.STRING, description: 'Länk' },
+              type: { type: Type.STRING, description: '"Lag", "Föreskrift" eller "ISO-standard"' }
             },
             required: ['id', 'title', 'summary', 'type']
           }

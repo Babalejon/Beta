@@ -66,6 +66,28 @@ export default function App() {
     if (savedOrgLaws) {
       setOrgLaws(JSON.parse(savedOrgLaws));
     }
+
+    // Pre-fetch all categories in the background for speed
+    const categories: ('laws' | 'regulations' | 'iso9001' | 'iso14001')[] = ['laws', 'regulations', 'iso9001', 'iso14001'];
+    categories.forEach(async (cat) => {
+      const cacheKey = `cached_${cat}`;
+      const cached = localStorage.getItem(cacheKey);
+      if (!cached) {
+        try {
+          const fetched = await fetchRequirements(cat);
+          if (fetched && fetched.length > 0) {
+            localStorage.setItem(cacheKey, JSON.stringify(fetched));
+            // Populate state if it's currently empty
+            if (cat === 'laws') setLaws(prev => prev.length === 0 ? fetched : prev);
+            if (cat === 'regulations') setRegulations(prev => prev.length === 0 ? fetched : prev);
+            if (cat === 'iso9001') setIso9001(prev => prev.length === 0 ? fetched : prev);
+            if (cat === 'iso14001') setIso14001(prev => prev.length === 0 ? fetched : prev);
+          }
+        } catch (e) {
+          console.error(`Background fetch failed for ${cat}`, e);
+        }
+      }
+    });
   }, []);
 
   // Load data when tab changes
