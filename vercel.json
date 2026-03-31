@@ -13,8 +13,19 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "src": "/api/analyze",
+      "dest": "/api/analyze.ts",
+      "methods": ["POST", "OPTIONS"]
+    },
+    {
+      "src": "/api/requirements",
+      "dest": "/api/requirements.ts",
+      "methods": ["POST", "OPTIONS"]
+    },
+    {
+      "src": "/api/checklist",
+      "dest": "/api/checklist.ts",
+      "methods": ["POST", "OPTIONS"]
     },
     {
       "handle": "filesystem"
